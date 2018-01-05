@@ -1,0 +1,56 @@
+.el-col-12 {
+  width: 230px;
+}
+
+.el-menu-item-group__title {
+  padding: 0 0 7px 20px;
+}
+
+.el-submenu .el-menu-item {
+  text-align: center;
+}
+
+.el-menu-item-group>ul {}
+
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 230px;
+  min-height: 100%;
+}
+
+.el-menu {
+  background: #eef1f6;
+  border: none;
+  height: 100%;
+}
+
+.el-menu el-menu-vertical-demo {
+  height: 100%
+}
+
+.el-menu li {
+  text-align: left;
+}
+
+.slide-enter-active {
+  transition: all .3s;
+}
+
+.slide-leave-active {
+  transition: all .3s;
+}
+
+.slide-enter,
+.slide-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */
+
+{
+  transform: translateX(-10px);
+  opacity: 0;
+}
+
+.el-menu--collapse {
+  flex: 0 0 64px;
+}
+.el-menu-item.is-active{
+  color:#5272f9;
+}

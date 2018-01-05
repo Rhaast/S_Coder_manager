@@ -1,3 +1,6 @@
 <template>
-	<div>systemlog</div>
+  <div>
+  	<p>systemlog</p>
+  </div>
+
 </template>

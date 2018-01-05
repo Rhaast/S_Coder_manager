@@ -1,8 +1,7 @@
 <template>
-	<div class="bannermanager">banner</div>
+	<div>
+	<div class="bannercontent">
+      <router-view></router-view>
+    </div>
+	</div>
 </template>
-<style rel="stylesheet/scss" lang="scss">
-	.bannermanager{
-		width: 100%;
-	}
-</style>

@@ -1,3 +1,7 @@
 <template>
-	<div>usermanager</div>
+	<div>
+	<div class="usercontent">
+      <router-view></router-view>
+    </div>
+	</div>
 </template>

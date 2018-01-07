@@ -181,7 +181,6 @@ export default {
     white-space: nowrap;
     &.actived {
       width: 65px;
-      ;
     }
     span {
       cursor: pointer;

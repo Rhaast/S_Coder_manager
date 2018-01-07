@@ -49,7 +49,6 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    clear: both;
     margin-right: 40px;
     li {
       float: left;
@@ -73,12 +72,11 @@
     display: inline-block;
     font-weight: 700;
     font-size: 20px;
-    position: absolute;
-    left: 245px;
+    float:left;
   }
 
   .breadcrumb {
     float: right;
-    padding: 5px;
+    display:inline-block;
   }
 </style>

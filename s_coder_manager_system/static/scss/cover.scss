@@ -54,3 +54,15 @@
 .el-menu-item.is-active{
   color:#5272f9;
 }
+.el-table{
+  width:inherit;
+}
+.el-table td, .el-table th.is-leaf{
+  
+}
+.el-table th{
+  text-align:center
+}
+.el-table__body-wrapper{
+  overflow:hidden;
+}

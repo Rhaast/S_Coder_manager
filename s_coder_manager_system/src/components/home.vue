@@ -18,12 +18,16 @@
       </div>
     </div>
     <div class="content-wrapper">
-      <div class="slideaside">
+      <div class="slideaside" :class="{actived: isActive}">
         <Sidebar ref="getsidebar"></Sidebar>
       </div>
       <div class="homecontent">
-        <breadcrumb></breadcrumb>
-        <router-view></router-view>
+        <div class="breadcrumb">
+          <breadcrumb></breadcrumb>
+        </div>
+        <div class="maincontent">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </div>
@@ -37,12 +41,15 @@ export default {
   data() {
     return {
       isCollapse: true,
+      isActive: ''
     }
   },
   methods: {
     collapsed() {
       this.isCollapse = !this.isCollapse;
       this.$refs.getsidebar.collapse();
+      this.isActive = !this.isActive;
+
     }
   },
   components: {
@@ -68,7 +75,6 @@ $high-color:#5272f9;
         padding: 0 32px;
         line-height: 60px;
         height: 60px;
-        border-right: 1px solid rgba(238, 241, 146, 0.3);
         h1 {
           font-size: 24px;
           color: #fff;
@@ -111,12 +117,24 @@ $high-color:#5272f9;
     top: 60px;
     bottom: 0;
     width: 100%;
-    .slideaside {}
+    .slideaside {
+      flex: 0, 0, 230px;
+      width: 230px;
+      &.actived {
+        width: 65px;
+        flex: 0, 0, 65px;
+      }
+    }
     .homecontent {
-      background:red;
-     flex:1;
+      overflow-y: scroll;  
+      // 裁剪 div 元素中内容的左/右边缘 - 如果溢出元素的内容区域的话
+      flex: 1;
       width: 100%;
       padding: 20px;
+      .breadcrumb {}
+      .maincontent {
+        margin-top: 50px;
+      }
     }
   }
 }

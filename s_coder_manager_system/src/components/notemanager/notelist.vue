@@ -8,34 +8,29 @@
       <input type="text" placeholder="输入用户名称" v-model="searchKey" @keyup.enter="search($event)"
       class="el-input__inner">
       </div> -->
-      </div>
+    </div>
     <div class="listbody">
-    <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width:100%;
+      <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width:100%;
     " @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55">
-      </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" :formatter="dateFormat" width="300" sortable>
-      </el-table-column>
-      <el-table-column prop="userName" label="发布人" width="120">
-      </el-table-column>
-      <el-table-column prop="title" label="文章标题" show-overflow-tooltip>
-      </el-table-column>
-          <el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="open2(scope.$index, scope.row)">删除</el-button>
-      </template>
-    </el-table-column>
-    </el-table>
+        <el-table-column type="selection" width="55">
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :formatter="dateFormat" width="300" sortable>
+        </el-table-column>
+        <el-table-column prop="userName" label="发布人" width="120">
+        </el-table-column>
+        <el-table-column prop="title" label="文章标题" show-overflow-tooltip>
+        </el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <div class="pagination">
-  <el-button type="primary" icon="el-icon-arrow-left" @click="lastpage">上一页</el-button>
-  <el-button type="primary" @click="nextpage">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+      <el-button type="primary" icon="el-icon-arrow-left" @click="lastpage">上一页</el-button>
+      <el-button type="primary" @click="nextpage">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
     </div>
   </div>
 </template>
@@ -47,19 +42,17 @@ export default {
     return {
       pageNo: 0,
       pageSize: 10,
-      tableData3: [
-        {
-          createTime: "",
-          userName: "",
-          title: "",
-        }
-      ],
+      tableData3: [{
+        createTime: "",
+        userName: "",
+        title: "",
+        id: ''
+      }],
       multipleSelection: []
     };
   },
   created() {
     this.getArticle();
-    this.handleDelete();
   },
   methods: {
     lastpage() {
@@ -79,25 +72,6 @@ export default {
         this.getArticle();
         console.log(this.pageNo);
       }
-    },
-    open2() {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
     },
     //时间格式化
     dateFormat: function(row, column) {
@@ -126,12 +100,36 @@ export default {
       });
     },
     // 删除文章
-    handleDelete:function(index){
-      let id = this.tableData3[index].id;
-      console.log(id);
-    }
+    handleDelete: function(index) {
+      let that = this;
+      that.id = this.tableData3[index].id;   //获取当前选中的文章id
+      console.log(this.id);   
+      this.$confirm('此操作将删除该文章, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        axios({
+          url: 'http://xyiscoding.top/studyapp/note/delete/' + this.id,
+          method: 'get',
+          dataType: "json",
+        }).then((res) => {
+          this.getArticle();
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
   }
 };
+
 </script>
 <style rel="stylesheet/scss" lang="scss">
 @import "../../../static/scss/cover";
@@ -142,10 +140,13 @@ export default {
     font-size: 14px;
   }
 }
+
 .listbody {
   margin-top: 50px;
 }
+
 .pagination {
   margin-top: 50px;
 }
+
 </style>

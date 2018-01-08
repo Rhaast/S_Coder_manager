@@ -34,35 +34,33 @@
   </div>
 </template>
 <script>
-import Sidebar from '../components/slidebar/Sidebar'
-import breadcrumb from '../components/breadcrumb/breadcrumb'
+import Sidebar from "../components/slidebar/Sidebar";
+import breadcrumb from "../components/breadcrumb/breadcrumb";
 export default {
-  name: 'HelloWorld',
+  name: "HelloWorld",
   data() {
     return {
       isCollapse: true,
-      isActive: ''
-    }
+      isActive: ""
+    };
   },
   methods: {
     collapsed() {
       this.isCollapse = !this.isCollapse;
       this.$refs.getsidebar.collapse();
       this.isActive = !this.isActive;
-
     }
   },
   components: {
     Sidebar,
     breadcrumb
   }
-}
-
+};
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style rel="stylesheet/scss" lang="scss">
-@import '../../static/scss/cover';
-$high-color:#5272f9;
+@import "../../static/scss/cover";
+$high-color: #5272f9;
 .home-wrapper {
   .header {
     .headerbg {
@@ -126,17 +124,17 @@ $high-color:#5272f9;
       }
     }
     .homecontent {
-      overflow-y: scroll;  
+      overflow-y: scroll;
       // 裁剪 div 元素中内容的左/右边缘 - 如果溢出元素的内容区域的话
       flex: 1;
       width: 100%;
       padding: 20px;
-      .breadcrumb {}
+      .breadcrumb {
+      }
       .maincontent {
         margin-top: 50px;
       }
     }
   }
 }
-
 </style>

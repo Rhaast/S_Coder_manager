@@ -6,10 +6,12 @@ import router from './router'
 import ElementUI from 'element-ui'
 import '../node_modules/element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
-
+import mavonEditor from 'mavon-editor'
+import '../node_modules/mavon-editor/dist/css/index.css'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(axios)
+Vue.use(mavonEditor)
 
 /* eslint-disable no-new */
 new Vue({

@@ -4,6 +4,7 @@ import home from '@/components/home'
 // 笔记管理
 import noteView from "../components/notemanager/notemanager"
 const NOTELIST = resolve =>require(['../components/notemanager/notelist'],resolve);
+const ADDNOTE = resolve =>require(['../components/notemanager/addnote'],resolve);
 // banner管理
 import bannerView from "../components/bannermanager/bannermanager"
 const PICMANAGER = resolve =>require(['../components/bannermanager/picmanager'],resolve);
@@ -48,6 +49,12 @@ export default new Router({
           component: NOTELIST,
           meta: {
             breadcrumbName: "笔记列表"
+          }
+        },{
+          path: '/notemanager/addnote',
+          component: ADDNOTE,
+          meta: {
+            breadcrumbName: "新增笔记"
           }
         }
 

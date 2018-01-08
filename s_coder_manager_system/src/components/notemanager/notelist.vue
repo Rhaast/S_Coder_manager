@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="listheader">
-      <el-button type="primary" icon="plus"><i class="el-icon-plus"></i>新增</el-button>
+      <el-button type="primary" @click="$router.push('/notemanager/addnote')"><i class="el-icon-plus"></i>新增</el-button>
       <el-button type="danger">删除选中</el-button>
       <!-- <div class="el-input" style="width: 200px; float: right;">
       <i class="el-input__icon el-icon-search"></i>
@@ -14,7 +14,7 @@
     " @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55">
       </el-table-column>
-      <el-table-column prop="createTime" label="创建时间" :formatter="dateFormat" width="300">
+      <el-table-column prop="createTime" label="创建时间" :formatter="dateFormat" width="300" sortable>
       </el-table-column>
       <el-table-column prop="userName" label="发布人" width="120">
       </el-table-column>
@@ -33,6 +33,10 @@
     </el-table-column>
     </el-table>
     </div>
+    <div class="pagination">
+  <el-button type="primary" icon="el-icon-arrow-left" @click="lastpage">上一页</el-button>
+  <el-button type="primary" @click="nextpage">下一页<i class="el-icon-arrow-right el-icon--right"></i></el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -47,7 +51,7 @@ export default {
         {
           createTime: "",
           userName: "",
-          title: ""
+          title: "",
         }
       ],
       multipleSelection: []
@@ -55,25 +59,46 @@ export default {
   },
   created() {
     this.getArticle();
+    this.handleDelete();
   },
   methods: {
-      open2() {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+    lastpage() {
+      if (this.pageNo == 0) {
+        return;
+      } else {
+        this.pageNo--;
+        this.getArticle();
+        console.log(this.pageNo);
+      }
+    },
+    nextpage() {
+      if (this.tableData3.length < this.pageSize) {
+        this.$message("没有更多的内容");
+      } else {
+        this.pageNo++;
+        this.getArticle();
+        console.log(this.pageNo);
+      }
+    },
+    open2() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
           this.$message({
-            type: 'success',
-            message: '删除成功!'
+            type: "success",
+            message: "删除成功!"
           });
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "info",
+            message: "已取消删除"
+          });
         });
-      },
+    },
     //时间格式化
     dateFormat: function(row, column) {
       var date = row[column.property];
@@ -99,20 +124,28 @@ export default {
         that.tableData3 = response.data.detail;
         console.log(this.tableData3);
       });
+    },
+    // 删除文章
+    handleDelete:function(index){
+      let id = this.tableData3[index].id;
+      console.log(id);
     }
   }
 };
 </script>
 <style rel="stylesheet/scss" lang="scss">
 @import "../../../static/scss/cover";
-.listheader{
+.listheader {
   text-align: left;
-  .el-icon-plus{
+  .el-icon-plus {
     padding-right: 6px;
     font-size: 14px;
   }
 }
-.listbody{
+.listbody {
+  margin-top: 50px;
+}
+.pagination {
   margin-top: 50px;
 }
 </style>

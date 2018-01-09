@@ -2,7 +2,7 @@
   <div>
     <div class="listheader">
       <el-button type="primary" @click="$router.push('/notemanager/addnote')"><i class="el-icon-plus"></i>新增</el-button>
-      <el-button type="danger">删除选中</el-button>
+      <el-button type="danger" @click="deletechoose" :disabled="forbidden">删除选中</el-button>
       <!-- <div class="el-input" style="width: 200px; float: right;">
       <i class="el-input__icon el-icon-search"></i>
       <input type="text" placeholder="输入用户名称" v-model="searchKey" @keyup.enter="search($event)"
@@ -42,19 +42,54 @@ export default {
     return {
       pageNo: 0,
       pageSize: 10,
-      tableData3: [{
-        createTime: "",
-        userName: "",
-        title: "",
-        id: ''
-      }],
-      multipleSelection: []
+      tableData3: [
+        {
+          createTime: "",
+          userName: "",
+          title: "",
+          id: ""
+        }
+      ],
+      multipleSelection: [],
+      forbidden: true
     };
   },
   created() {
     this.getArticle();
   },
   methods: {
+    // 删除选中的
+    deletechoose() {
+      console.log(this.multipleSelection);
+      // deleteRequest(selectedItem.id) // 删除请求
+      this.$confirm("此操作将删除选中的文章, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.multipleSelection.forEach(selectedItem => {
+            axios({
+              url:
+                "http://xyiscoding.top/studyapp/note/delete/" + selectedItem.id,
+              method: "get",
+              dataType: "json"
+            }).then(res => {
+              this.getArticle();
+              // this.$message({
+              //   type: 'success',
+              //   message: '删除成功!'
+              // });
+            });
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
+    },
     lastpage() {
       if (this.pageNo == 0) {
         return;
@@ -82,7 +117,13 @@ export default {
       return moment(date).format("YYYY-MM-DD HH:mm:ss a");
     },
     handleSelectionChange(val) {
+      console.log(val);
       this.multipleSelection = val;
+      if (this.multipleSelection.length != 0) {
+        this.forbidden = false;
+      } else {
+        this.forbidden = true;
+      }
     },
     getArticle: function() {
       let that = this;
@@ -99,37 +140,38 @@ export default {
         console.log(this.tableData3);
       });
     },
-    // 删除文章
+    // 删除单篇文章
     handleDelete: function(index) {
       let that = this;
-      that.id = this.tableData3[index].id;   //获取当前选中的文章id
-      console.log(this.id);   
-      this.$confirm('此操作将删除该文章, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        axios({
-          url: 'http://xyiscoding.top/studyapp/note/delete/' + this.id,
-          method: 'get',
-          dataType: "json",
-        }).then((res) => {
-          this.getArticle();
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+      that.id = this.tableData3[index].id; //获取当前选中的文章id
+      console.log(this.id);
+      this.$confirm("此操作将删除该文章, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          axios({
+            url: "http://xyiscoding.top/studyapp/note/delete/" + this.id,
+            method: "get",
+            dataType: "json"
+          }).then(res => {
+            this.getArticle();
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
           });
         })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
         });
-      });
-    },
+    }
   }
 };
-
 </script>
 <style rel="stylesheet/scss" lang="scss">
 @import "../../../static/scss/cover";
@@ -148,5 +190,4 @@ export default {
 .pagination {
   margin-top: 50px;
 }
-
 </style>

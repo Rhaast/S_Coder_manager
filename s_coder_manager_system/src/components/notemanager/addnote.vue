@@ -1,8 +1,8 @@
 <<template>
 <div>
  <div id="editor">
-    <mavon-editor style="height: 100%" v-model="content" ref=md @imgAdd="$imgAdd" @imgDel="$imgDel"></mavon-editor>
-    <button @click="uploadimg">upload</button>
+    <mavon-editor style="height: 100%" v-model="content" ref='md' @imgAdd="$imgAdd" @imgDel="$imgDel"></mavon-editor>
+    <button @click="uploadimg" class="uploadimg">uploadImg</button>
 </div>
 <el-button class="sub-article" type="primary" @click="dialogFormVisible = true">发表<i class="el-icon-upload2 el-icon--right"></i></el-button>
 	<el-dialog title="用户信息" :visible.sync="dialogFormVisible" class="handIn">
@@ -22,6 +22,7 @@
 </template>
 <script>
 import axios from "axios";
+import qs from "qs";
 export default {
   data() {
     return {
@@ -34,42 +35,50 @@ export default {
     };
   },
   methods: {
-            // 绑定@imgAdd event
-        $imgAdd(pos, $file){
-            // 缓存图片信息
-            this.img_file[pos] = $file;
-            console.log(this.img_file);
-        },
-        $imgDel(pos){
-            delete this.img_file[pos];
-        },
-        uploadimg($e){
-            let that = this;
-            // 第一步.将图片上传到服务器.
-            var formdata = new FormData();
-            for(var _img in this.img_file){
-                formdata.append(_img, this.img_file[_img]);
-            }
-            axios({
-                url: 'http://xyiscoding.top/studyapp/note/updateImg?img=_img',
-                method: 'post',
-                headers: { 'Content-Type': 'multipart/form-data' },
-            }).then((res) => {
-                 console.log(this.img_file[_img])
-                 that.picmessage = res.data.detail
-                 console.log(this.picmessage)
-                /**
+    // 绑定@imgAdd event
+    $imgAdd(pos, $file) {
+      // 缓存图片信息
+      console.log(pos);
+      this.img_file[pos] = $file;
+      console.log(this.img_file);
+    },
+    $imgDel(pos) {
+      delete this.img_file[pos];
+    },
+    uploadimg($e) {
+      let that = this;
+      // 第一步.将图片上传到服务器.
+      var formdata = new FormData();
+      for (var _img in this.img_file) {
+        // alert(_img); //获取原图片标志（./0）
+        formdata.append(_img, this.img_file[_img]);
+        (myimg => {
+          axios
+            .post(
+              "http://xyiscoding.top/studyapp/note/updateImg",
+              qs.stringify({ img: this.img_file[myimg].miniurl })
+            )
+            .then(res => {
+              if (res.status == 200) {
+                //  console.log("http://xyiscoding.top/img/"+res.data.detail);
+                console.log(res);
+              }
+              that.picmessage = res.data.detail;
+              /**
                  * 例如：返回数据为 [[pos: url], [pos, url]...]
                  * pos 为原图片标志（./0）
                  * url 为上传后图片的url地址
                  */
-                 // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
-                for (var i in res) {
-                    $vm.$img2Url 
-                    // $vm.$img2Url(res[i].[0],res[i].[1]);
-                }
-            })
-        },
+              // 第二步.将返回的url替换到文本原位置![...](./0) -> ![...](url)
+
+              this.$refs.md.$img2Url(
+                myimg,
+                "http://xyiscoding.top/img/" + res.data.detail
+              );
+            });
+        })(_img); //闭包
+      }
+    },
     subArticle() {
       if (!this.title) {
         this.$message.error("文章标题不能为空");
@@ -119,6 +128,26 @@ export default {
 @import "../../../static/scss/cover";
 #editor {
   height: 750px;
+  .uploadimg{
+    float: left;
+    width: 89px;
+    height: 40px;
+    border-radius: 6px;
+    background: #5272f9;
+    border: none;
+    color: #fff;
+    margin-top: 20px;
+    &:focus{
+    background-color:#6d89ff;
+    outline:none;
+    border-radius: 6px;  
+    border-color:#6d89ff;
+    }
+    &:hover{
+     background-color:#6d89ff;
+     border-color:#6d89ff;
+    }
+  }
 }
 .sub-article {
   float: right;

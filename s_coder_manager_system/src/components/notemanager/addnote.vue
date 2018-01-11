@@ -48,10 +48,10 @@ export default {
     uploadimg($e) {
       let that = this;
       // 第一步.将图片上传到服务器.
-      var formdata = new FormData();
+      // var formdata = new FormData();
       for (var _img in this.img_file) {
         // alert(_img); //获取原图片标志（./0）
-        formdata.append(_img, this.img_file[_img]);
+        // formdata.append(_img, this.img_file[_img]);
         (myimg => {
           axios
             .post(

@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="listbody">
-      <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width:100%;
+      <el-table ref="multipleTable" :data="tableData3.slice((currentPage-1)*pagesize,currentPage*pagesize)" tooltip-effect="dark" style="width:100%;
     " @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55">
         </el-table-column>
@@ -30,11 +30,12 @@
       </el-table>
     </div>
     <el-pagination
+      class="pagination"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page.sync="pageNo"
-	  :background="true"
-      :page-size="pageSize"
+      :current-page.sync="currentPage"
+	    :background="true"
+      :page-size="pagesize"
       layout="prev, pager, next"
       :total="totalData3Number">
     </el-pagination>
@@ -46,9 +47,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-	 pageNo: 1,
-     pageSize: 10,
-      currentPage1: 5,
+      pagesize: 10,
+      currentPage: 1,
       tableData3: [
         {
           createTime: "",
@@ -56,8 +56,8 @@ export default {
           content: "",
           id: ""
         }
-	  ],
-	  totalData3Number:0,
+      ],
+      totalData3Number: 0,
       multipleSelection: [],
       forbidden: true,
       userName: "",
@@ -66,20 +66,19 @@ export default {
   },
   created() {},
   methods: {
-	   handleSizeChange(val) {
-		this.pagesize = val;
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-		console.log(`当前页: ${val}`);
-	
-      },
-    findcomment(ev) {
+    // handleSizeChange: function (size) {
+    //     this.pagesize = size;
+    // },   //pageSize 改变时会触发
+    handleCurrentChange: function(currentPage){
+        this.currentPage = currentPage;
+        // currentPage 改变时会触发
+    },
+    findcomment(pageNum, pageSize) {
       let that = this;
       if (this.userName == "") {
         this.$message({
-          message: '昵称不能为空',
-          type: 'warning'
+          message: "昵称不能为空",
+          type: "warning"
         });
       }
       axios({
@@ -88,9 +87,9 @@ export default {
         dataType: "json"
       }).then(res => {
         if (!res.data.detail.length == 0) {
-		  that.tableData3 = res.data.detail;
-		  that.totalData3Number = res.data.detail.length;
-		  console.log(this.totalDataNumber)
+          that.tableData3 = res.data.detail;
+          that.totalData3Number = res.data.detail.length;
+          console.log(this.totalData3Number);
           this.userName = this.userName;
         } else {
           this.$message.error("暂时没有数据");
@@ -195,6 +194,7 @@ export default {
           });
         });
     }
+    
   }
 };
 </script>
@@ -212,6 +212,9 @@ export default {
       float: right;
     }
   }
+}
+.pagination{
+  margin-top: 50px;
 }
 
 .listbody {

@@ -75,7 +75,7 @@ export const MENULIST = [
     menuIcon: "el-icon-view",
     menuSubLink: [
       {
-        menuName: "管理员列表",
+        menuName: "角色管理",
         menuUrl: "/managermessage/managerlist"
       },
       {

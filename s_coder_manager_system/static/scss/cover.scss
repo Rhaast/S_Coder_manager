@@ -78,3 +78,9 @@
   background-color:#6d89ff;
   border-color:#6d89ff;
 }
+.el-pagination.is-background .el-pager li.active{
+  background-color:#5272f9
+}
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li:hover{
+  color:#5272f9
+}

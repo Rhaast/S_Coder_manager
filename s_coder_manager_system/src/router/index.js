@@ -159,7 +159,7 @@ export default new Router({
           path: '/managermessage/managerlist',
           component: MANAGERLIST,
           meta: {
-            breadcrumbName: "管理员列表"
+            breadcrumbName: "角色管理"
           }
         },
         {

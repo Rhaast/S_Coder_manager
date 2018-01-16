@@ -66,9 +66,9 @@ export default {
   },
   created() {},
   methods: {
-    // handleSizeChange: function (size) {
-    //     this.pagesize = size;
-    // },   //pageSize 改变时会触发
+    handleSizeChange: function (size) {
+        this.pagesize = size;
+    },   //pageSize 改变时会触发
     handleCurrentChange: function(currentPage){
         this.currentPage = currentPage;
         // currentPage 改变时会触发

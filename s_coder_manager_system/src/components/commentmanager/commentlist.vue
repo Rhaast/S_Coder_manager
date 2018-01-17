@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="listbody">
-      <el-table ref="multipleTable" :data="tableData3.slice((currentPage-1)*pagesize,currentPage*pagesize)" tooltip-effect="dark" style="width:100%;
+      <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width:100%;
     " @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55">
         </el-table-column>
@@ -67,13 +67,14 @@ export default {
   created() {},
   methods: {
     handleSizeChange: function (size) {
-        this.pagesize = size;
+        this.pagesize =size;
     },   //pageSize 改变时会触发
     handleCurrentChange: function(currentPage){
         this.currentPage = currentPage;
+        this.findcomment()
         // currentPage 改变时会触发
     },
-    findcomment(pageNum, pageSize) {
+    findcomment($event) {
       let that = this;
       if (this.userName == "") {
         this.$message({
@@ -87,9 +88,9 @@ export default {
         dataType: "json"
       }).then(res => {
         if (!res.data.detail.length == 0) {
-          that.tableData3 = res.data.detail;
+          that.tableData3 = res.data.detail.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize);
           that.totalData3Number = res.data.detail.length;
-          console.log(this.totalData3Number);
+          console.log($event);
           this.userName = this.userName;
         } else {
           this.$message.error("暂时没有数据");

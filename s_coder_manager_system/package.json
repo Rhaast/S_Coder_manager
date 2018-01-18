@@ -13,6 +13,7 @@
     "axios": "^0.17.1",
     "css-loader": "^0.28.7",
     "element-ui": "^2.0.10",
+    "js-md5": "^0.7.3",
     "mavon-editor": "^2.4.16",
     "moment": "^2.20.1",
     "node-sass": "^4.7.2",

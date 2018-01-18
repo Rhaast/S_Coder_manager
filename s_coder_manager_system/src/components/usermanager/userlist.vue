@@ -56,7 +56,7 @@
 		<el-button type="primary" @click="reg">确 定</el-button>
 		</div>
 		</el-dialog>
-    <userdetail ref="showdetail"></userdetail>
+    <userdetail ref="showdetail" :id="id"></userdetail>
   </div>
 </template>
 <style rel="stylesheet/scss" lang="scss">
@@ -66,6 +66,7 @@
 </style>
 <<script>
 import axios from 'axios'
+import md5 from 'js-md5'
 import userdetail from '../userdetail/userdetail'
 export default {
   data(){
@@ -84,8 +85,9 @@ export default {
       mobile:'',
       email:'',
       sex:'',
+      id:'',
 		forbidden: true,
-      dialogFormVisible: false,
+    dialogFormVisible: false,
 		multipleSelection: [],
 	  }
   },
@@ -94,11 +96,16 @@ export default {
   },
   
   methods: {
+  // 查看详情
    handleEdit:function(index){
       let that = this;
-      that.id = this.tableData3[index].id; //获取当前选中的评论id
+      this.id = this.tableData3[index].id; //获取当前选中的userid
       console.log(this.id);
+      //用定时器影响初始值id为空的事件
+      setTimeout(() => {
+      this.$refs.showdetail.getid();
       this.$refs.showdetail.showdetail();
+      },0);
       
     },
     reg() {
@@ -151,7 +158,7 @@ export default {
         method:'post',
         data:{
           userName:this.userName,
-          password:this.password,
+          password:md5(this.password),
           nickName:this.nickName,
           mobile:this.mobile,
           email:this.email,

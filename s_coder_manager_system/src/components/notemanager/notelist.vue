@@ -124,6 +124,10 @@ export default {
         this.forbidden = true;
       }
     },
+    handleEdit:function(index){
+				let id = this.tableData3[index].id;
+				this.$router.push({path:'/notemanager/edit',query:{id:id}})
+			},
     getArticle: function() {
       let that = this;
       axios({

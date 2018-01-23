@@ -32,9 +32,34 @@ export default {
       nickName: "",
       title: "",
       img_file: {},
+      id:'',
+      createTime:''
     };
   },
+  created () {
+      this.getnoteid()
+  },
   methods: {
+    getnoteid() {
+     let that = this // 取得笔记id
+     that.id = this.$route.query.id;
+     that.noteid = that.id;
+     console.log(this.noteid);
+      axios({
+        url: 'http://xyiscoding.top/studyapp/note/findById/' + that.noteid,
+        dataType: 'json',
+        method: 'get',
+      }).then((response)=>{
+        that.noteLists = response.data.detail.note;
+        that.content = that.noteLists.content;
+        that.title = that.noteLists.title;
+        that.userId = that.noteLists.userId;
+        that.userName = that.noteLists.userName;
+        console.log(this.noteLists)
+
+      })
+
+    },
     // 绑定@imgAdd event
     $imgAdd(pos, $file) {
       // 缓存图片信息
@@ -80,6 +105,7 @@ export default {
       }
     },
     subArticle() {
+    let that = this;
       if (!this.title) {
         this.$message.error("文章标题不能为空");
         return;
@@ -96,21 +122,23 @@ export default {
         this.$message.error("文章内容不能为空");
         return;
       }
-
+     that.createTime =Date.parse(new Date());
       axios({
-        url: "http://xyiscoding.top/studyapp/note/add",
+        url: "http://xyiscoding.top/studyapp/note/update",
         method: "post",
         dataType: "json",
         data: {
           title: this.title,
           content: this.content,
           userId: this.userId,
-          userName: this.nickName
+          userName: this.nickName,
+          id:this.id,
+          createTime:this.createTime
         }
       }).then(res => {
         if (res.data.result == "200") {
           this.$message({
-            message: "提交成功",
+            message: "更改成功",
             type: "success"
           });
           this.cce = setTimeout(() => {

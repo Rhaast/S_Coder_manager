@@ -1,20 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import home from '@/components/home'
+import login from '@/components/login/login'
+
 // 笔记管理
-import noteView from "../components/notemanager/notemanager"
-const NOTELIST = resolve =>require(['../components/notemanager/notelist'],resolve);
-const ADDNOTE = resolve =>require(['../components/notemanager/addnote'],resolve);
-const EDITNOTE = resolve =>require(['../components/edit/edit'],resolve);
+import noteView from "@/components/notemanager/notemanager"
+const NOTELIST = resolve =>require(['@/components/notemanager/notelist'],resolve);
+const ADDNOTE = resolve =>require(['@/components/notemanager/addnote'],resolve);
+const EDITNOTE = resolve =>require(['@/components/edit/edit'],resolve);
 // banner管理
-import bannerView from "../components/bannermanager/bannermanager"
-const PICMANAGER = resolve =>require(['../components/bannermanager/picmanager'],resolve);
+import bannerView from "@/components/bannermanager/bannermanager"
+const PICMANAGER = resolve =>require(['@/components/bannermanager/picmanager'],resolve);
 // 提问管理
-import questionView from "../components/questionmanager/questionmanager"
-const QUESTIONLIST = resolve =>require(['../components/questionmanager/questionlist'],resolve);
+import questionView from "@/components/questionmanager/questionmanager"
+const QUESTIONLIST = resolve =>require(['@/components/questionmanager/questionlist'],resolve);
 // 评论管理
-import commentView from "../components/commentmanager/commentmanager"
-const COMMENTLIST = resolve => require(['../components/commentmanager/commentlist'],resolve);
+import commentView from "@/components/commentmanager/commentmanager"
+const COMMENTLIST = resolve => require(['@/components/commentmanager/commentlist'],resolve);
 // 用户管理
 import userView from "@/components/usermanager/usermanager"
 const USERLIST = resolve => require(['@/components/usermanager/userlist'], resolve);
@@ -31,8 +33,14 @@ const SYSTEMLOG = resolve => require(["@/components/managermessage/systemlog"], 
 Vue.use(Router)
 
 export default new Router({
-  routes: [{
-    path: '/',
+  routes: [
+    {
+    path:'/',
+    name:'login',
+    component:login,
+    // redirect: '/login/login'
+    },{
+    path: '/home',
     name: 'home',
     component: home,
     meta: {

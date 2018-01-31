@@ -7,17 +7,17 @@
             <p class="text-muted">用户名/密码登录</p>
             <div class="input-group m-b-1">
               <span class="input-group-addon"><i class="el-icon-success"></i></span>
-              <input type="text" class="form-control" placeholder="user name" v-model="username">
+              <input type="text" class="form-control" placeholder="userName" v-model="username" @input="wuha">
             </div>
             <div class="input-group m-b-2">
               <span class="input-group-addon"><i class="el-icon-success"></i></span>
               <input type="password" class="form-control" placeholder="password" v-model="password"
-                     @keyup.enter="login">
+                     @keyup.enter="login" @input="wuha">
             </div>
             <div class="row">
               <el-row>
                 <el-col :span="24">
-                  <el-button type="primary" class="button" @click="$router.push('/notemanager/notelist')">登录</el-button>
+                  <el-button type="primary" class="button" @click="login" :disabled="chooese">登录</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -28,12 +28,46 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      chooese: true,
     };
+  },
+  methods: {
+    wuha(){
+      if(!this.username||!this.password){
+        this.chooese=true;
+      }else{
+        this.chooese=false;
+      }
+    },
+    login(){
+      let that = this;
+      axios({
+        url:'http://xyiscoding.top/studyapp/user/manager/login',
+        dataType:'json',
+        method:'post',
+        data:{
+          'userName':this.username,
+          'password':this.password
+        },
+      }).then(res=>{
+        if(res.data.result=='200'){
+          localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
+            this.$message({
+            message: "登录成功",
+            type: "success"
+          });
+          this.$router.push('/notemanager/notelist')
+        }else{
+          this.$message.error("用户名或密码错误");
+        }
+      })
+    }
   }
 };
 </script>

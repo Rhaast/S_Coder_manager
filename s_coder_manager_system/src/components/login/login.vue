@@ -57,12 +57,15 @@ export default {
         },
       }).then(res=>{
         if(res.data.result=='200'){
-          localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
+          // let data = JSON.stringify(res.data)
+          // sessionStorage.obj = data;    //将登陆成功的账号信息保存到data里然后再存入session
+           localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
             this.$message({
             message: "登录成功",
             type: "success"
           });
-          this.$router.push('/notemanager/notelist')
+         this.$router.replace('/notemanager/notelist')
+
         }else{
           this.$message.error("用户名或密码错误");
         }

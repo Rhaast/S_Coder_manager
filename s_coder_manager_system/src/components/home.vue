@@ -11,9 +11,10 @@
           <img src="../assets/image/icon-slidebar.png" height="25" width="21" @click="collapsed">
         </div>
         <div class="userstatus">
-          <span class="username">admin</span>
+          <span class="username">{{userName}}</span>
+          <span class="portrait"><img :src="'http://xyiscoding.top/img/'+portrait" height="24" width="24"></span>
           <span class="verticalline">|</span>
-          <span class="loginstatus">注销</span>
+          <span class="loginstatus" @click="logout">{{logintxt}}</span>
         </div>
       </div>
     </div>
@@ -41,10 +42,54 @@ export default {
   data() {
     return {
       isCollapse: true,
-      isActive: ""
+      isActive: "",
+      logintxt: "未登录",
+      userName:'',
+      portrait:''
     };
   },
+  mounted() {
+    if (localStorage.getItem('data')) {
+      this.logintxt = "注销";
+    }
+    if (!localStorage.getItem('data')) {
+      this.logintxt = "未登录";
+    }
+    this.getmessage();
+  },
   methods: {
+    logout(){
+      if(this.logintxt=='注销'){
+        this.$confirm('是否退出后台管理系统?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          center: true
+        }).then(() => {
+           this.$router.push('/')
+           location.reload();
+           localStorage.clear()
+           this.$message({
+            type: 'success',
+            message: '已退出'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消'
+          });
+        });
+      }
+    },
+    getmessage(){
+      // let that = this;
+      // let message = JSON.parse(sessionStorage.obj)
+      let that = this
+      let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
+      that.userName = message.detail.userName
+      that.portrait = message.detail.portrait
+
+    },
     collapsed() {
       this.isCollapse = !this.isCollapse;
       this.$refs.getsidebar.collapse();
@@ -102,6 +147,12 @@ $high-color: #5272f9;
         width: 230px;
         font-size: 18px;
         margin-right: 24px;
+        .portrait img {
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+          border-radius: 50%;
+        }
         .verticalline {
           line-height: 60px;
           padding: 0 24px;

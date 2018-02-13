@@ -12,12 +12,12 @@
             <div class="input-group m-b-2">
               <span class="input-group-addon"><i class="el-icon-success"></i></span>
               <input type="password" class="form-control" placeholder="password" v-model="password"
-                     @keyup.enter="login" @input="wuha">
+                     @keyup.enter="submitForm" @input="wuha">
             </div>
             <div class="row">
               <el-row>
                 <el-col :span="24">
-                  <el-button type="primary" class="button" @click="login" :disabled="chooese">登录</el-button>
+                  <el-button type="primary" class="button" @click="submitForm" :disabled="chooese">登录</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -34,6 +34,7 @@ export default {
     return {
       username: "",
       password: "",
+      logindata:{},
       chooese: true,
     };
   },
@@ -45,32 +46,46 @@ export default {
         this.chooese=false;
       }
     },
-    login(){
-      let that = this;
-      axios({
-        url:'http://xyiscoding.top/studyapp/user/manager/login',
-        dataType:'json',
-        method:'post',
-        data:{
-          'userName':this.username,
-          'password':this.password
-        },
-      }).then(res=>{
-        if(res.data.result=='200'){
-          // let data = JSON.stringify(res.data)
-          // sessionStorage.obj = data;    //将登陆成功的账号信息保存到data里然后再存入session
-           localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
-            this.$message({
-            message: "登录成功",
-            type: "success"
-          });
-         this.$router.replace('/notemanager/notelist')
-
-        }else{
-          this.$message.error("用户名或密码错误");
+    submitForm(){
+      let form1 = {
+        'username':this.username,
+        'password':this.password
+            
         }
-      })
+      this.$store.commit("updatamessage",form1);
+      this.$store.dispatch('login')
     }
+
+    // login(){
+    //   let that = this;
+    //   axios({
+    //     url:'http://xyiscoding.top/studyapp/user/manager/login',
+    //     dataType:'json',
+    //     method:'post',
+    //     data:{
+    //       'userName':this.username,
+    //       'password':this.password
+    //     },
+    //   }).then(res=>{
+    //     if(res.data.result=='200'){
+    //       // let data = JSON.stringify(res.data)
+    //       // sessionStorage.obj = data;    //将登陆成功的账号信息保存到data里然后再存入session
+    //         localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
+    //         let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
+    //         // that.userName = message.detail.userName
+    //         // that.portrait = message.detail.portrait
+    //         this.$store.commit("updatelogindata",message.detail)
+    //         this.$message({
+    //         message: "登录成功",
+    //         type: "success"
+    //       });
+    //      this.$router.replace('/notemanager/notelist')
+
+    //     }else{
+    //       this.$message.error("用户名或密码错误");
+    //     }
+    //   })
+    // }
   }
 };
 </script>
@@ -117,8 +132,8 @@ export default {
 .login .login-form .card-block {
   padding: 35px;
 }
-.login .login-form .card-block h1{
-    font-size: 36px;
+.login .login-form .card-block h1 {
+  font-size: 36px;
 }
 .login .login-form .card-block p {
   margin: 15px 0;
@@ -206,7 +221,7 @@ export default {
   border: 1px solid rgba(0, 0, 0, 0.15);
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
-.el-button btn btn-primary p-x-2 el-button--primary{
+.el-button btn btn-primary p-x-2 el-button--primary {
   width: 100%;
 }
 .login .login-form .card-block .row {

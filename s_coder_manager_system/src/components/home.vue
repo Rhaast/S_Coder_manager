@@ -11,8 +11,8 @@
           <img src="../assets/image/icon-slidebar.png" height="25" width="21" @click="collapsed">
         </div>
         <div class="userstatus">
-          <span class="username">{{userName}}</span>
-          <span class="portrait"><img :src="'http://xyiscoding.top/img/'+portrait" height="24" width="24"></span>
+          <span class="username">{{logindata.userName}}</span>
+          <span class="portrait"><img :src="'http://xyiscoding.top/img/'+logindata.portrait" height="24" width="24"></span>
           <span class="verticalline">|</span>
           <span class="loginstatus" @click="logout">{{logintxt}}</span>
         </div>
@@ -37,6 +37,7 @@
 <script>
 import Sidebar from "../components/slidebar/Sidebar";
 import breadcrumb from "../components/breadcrumb/breadcrumb";
+import {mapState} from 'vuex';
 export default {
   name: "HelloWorld",
   data() {
@@ -44,9 +45,12 @@ export default {
       isCollapse: true,
       isActive: "",
       logintxt: "未登录",
-      userName:'',
-      portrait:''
     };
+  },
+  computed: {    //获得vuex里的状态
+    logindata(){
+      return this.$store.state.logindata;
+    }
   },
   mounted() {
     if (localStorage.getItem('data')) {
@@ -55,7 +59,6 @@ export default {
     if (!localStorage.getItem('data')) {
       this.logintxt = "未登录";
     }
-    this.getmessage();
   },
   methods: {
     logout(){
@@ -69,6 +72,8 @@ export default {
            this.$router.push('/')
            location.reload();
            localStorage.clear()
+           this.$store.commit("updateUserInfo","");
+           this.$store.commit("updatePortrait","");
            this.$message({
             type: 'success',
             message: '已退出'
@@ -80,15 +85,6 @@ export default {
           });
         });
       }
-    },
-    getmessage(){
-      // let that = this;
-      // let message = JSON.parse(sessionStorage.obj)
-      let that = this
-      let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
-      that.userName = message.detail.userName
-      that.portrait = message.detail.portrait
-
     },
     collapsed() {
       this.isCollapse = !this.isCollapse;

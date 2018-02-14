@@ -18,19 +18,21 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    login(context) {
+    login({commit},context) {
+      alert(11)
       axios({
         method: 'post',
         url: 'http://xyiscoding.top/studyapp/user/manager/login',
         dataType: 'json',
         data: context.state.form1
       }).then(res => {
-        if (res.data.result == '200') {
+        if (res.data.result == '200') {         
           // let data = JSON.stringify(res.data)
           // sessionStorage.obj = data;    //将登陆成功的账号信息保存到data里然后再存入session
           localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
           let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
-          this.$store.commit("updatelogindata", message.detail)
+          let logindata = message.detail
+          commit("updatelogindata", logindata)
           this.$message({
             message: "登录成功",
             type: "success"

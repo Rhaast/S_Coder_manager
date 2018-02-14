@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login-wrapper">
-             <div class="login-form">
+        <div class="login-form">
           <div class="card-block">
             <h1>Admin</h1>
             <p class="text-muted">用户名/密码登录</p>
@@ -22,7 +22,7 @@
               </el-row>
             </div>
           </div>
-             </div>
+        </div>
     </div>   
   </div>
 </template>
@@ -43,49 +43,17 @@ export default {
       if(!this.username||!this.password){
         this.chooese=true;
       }else{
-        this.chooese=false;
+        this.chooese=false; 
       }
     },
     submitForm(){
       let form1 = {
-        'username':this.username,
-        'password':this.password
-            
-        }
-      this.$store.commit("updatamessage",form1);
+          userName:this.username,
+          password:this.password            
+      };
       this.$store.dispatch('login')
+      this.$store.commit('updatamessage',form1)
     }
-
-    // login(){
-    //   let that = this;
-    //   axios({
-    //     url:'http://xyiscoding.top/studyapp/user/manager/login',
-    //     dataType:'json',
-    //     method:'post',
-    //     data:{
-    //       'userName':this.username,
-    //       'password':this.password
-    //     },
-    //   }).then(res=>{
-    //     if(res.data.result=='200'){
-    //       // let data = JSON.stringify(res.data)
-    //       // sessionStorage.obj = data;    //将登陆成功的账号信息保存到data里然后再存入session
-    //         localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
-    //         let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
-    //         // that.userName = message.detail.userName
-    //         // that.portrait = message.detail.portrait
-    //         this.$store.commit("updatelogindata",message.detail)
-    //         this.$message({
-    //         message: "登录成功",
-    //         type: "success"
-    //       });
-    //      this.$router.replace('/notemanager/notelist')
-
-    //     }else{
-    //       this.$message.error("用户名或密码错误");
-    //     }
-    //   })
-    // }
   }
 };
 </script>

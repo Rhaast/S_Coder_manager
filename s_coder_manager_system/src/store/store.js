@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
 import axios from 'axios'
 
 Vue.use(Vuex)
@@ -15,12 +14,11 @@ const store = new Vuex.Store({
       state.logindata = logindata;
     },
     updatamessage(state, form1) {
-      state.form1 = from1
+      state.form1 = form1
     }
   },
   actions: {
     login(context) {
-      alert(11)
       axios({
         method: 'post',
         url: 'http://xyiscoding.top/studyapp/user/manager/login',

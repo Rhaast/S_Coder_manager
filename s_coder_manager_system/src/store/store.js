@@ -18,7 +18,7 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    login({commit},context) {
+    login(context) {
       alert(11)
       axios({
         method: 'post',
@@ -32,7 +32,7 @@ const store = new Vuex.Store({
           localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
           let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
           let logindata = message.detail
-          commit("updatelogindata", logindata)
+          context.commit("updatelogindata", logindata)
           this.$message({
             message: "登录成功",
             type: "success"

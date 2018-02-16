@@ -51,8 +51,9 @@ export default {
           userName:this.username,
           password:this.password            
       };
-      this.$store.dispatch('login')
       this.$store.commit('updatamessage',form1)
+      this.$store.dispatch('login')
+      
     }
   }
 };

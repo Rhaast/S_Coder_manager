@@ -12,12 +12,12 @@
             <div class="input-group m-b-2">
               <span class="input-group-addon"><i class="el-icon-success"></i></span>
               <input type="password" class="form-control" placeholder="password" v-model="password"
-                     @keyup.enter="submitForm" @input="wuha">
+                     @keyup.enter="getDataAsync" @input="wuha">
             </div>
             <div class="row">
               <el-row>
                 <el-col :span="24">
-                  <el-button type="primary" class="button" @click="submitForm" :disabled="chooese">登录</el-button>
+                  <el-button type="primary" class="button" @click="getDataAsync" :disabled="chooese">登录</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -29,6 +29,7 @@
 
 <script>
 import axios from 'axios'
+import { mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -39,6 +40,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["login"]),
     wuha(){
       if(!this.username||!this.password){
         this.chooese=true;
@@ -46,14 +48,30 @@ export default {
         this.chooese=false; 
       }
     },
-    submitForm(){
+    getDataAsync(){
       let form1 = {
           userName:this.username,
           password:this.password            
       };
-      this.$store.dispatch('login')
       this.$store.commit('updatamessage',form1)
-    }
+      this.login().then(res=>{    
+          if (res.data.result == '200') {   
+          localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
+          let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
+          let logindata = message.detail
+          this.$store.commit("updatelogindata", logindata)
+          this.$message({
+            type: 'success',
+            message: '登录成功'
+          });
+          // localStorage.setItem('mystate', JSON.stringify(context.state));
+           this.$router.replace('/notemanager/notelist')
+      } else {
+       this.$message.error("用户名或密码错误");
+      }
+      })
+    },  
+
   }
 };
 </script>

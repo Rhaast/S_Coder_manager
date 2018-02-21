@@ -7,6 +7,7 @@
 1. [vue](https://github.com/vuejs/vue)
 2. [vue-router](https://github.com/vuejs/vue-router)
 3. [vue-cli](https://github.com/vuejs/vue-cli)
+4. [vuex](https://github.com/vuejs/vuex)
 
 ## UI组件库
 ***

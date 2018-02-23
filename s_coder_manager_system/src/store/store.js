@@ -1,33 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+import mutations from './mutations'
+import actions from './actions'
+import getters from './getters'
+// import VuexPersistence from 'vuex-persist'
+
 
 Vue.use(Vuex)
-// const localLoginData = localStorage.getItem('data')
-const store = new Vuex.Store({
-  state: {
-    logindata:{}, //登录成功返回信息
-    form1: {}  //登录信息
-  },
-  mutations: {
-    updatelogindata(state, logindata) {
-      state.logindata = logindata;
-    },
-    updatamessage(state, form1) {
-      state.form1 = form1
-    }
-    
-  },
-  actions: {
-    login(context) {
-      return axios({
-        method: 'post',
-        url: 'http://xyiscoding.top/studyapp/user/manager/login',
-        dataType: 'json',
-        data: context.state.form1
-      })
-    }
+const localLoginData = global.localStorage;
+  const state = {
+    logindata: {}, // 初始化vuex，刷新时获取localstorage
+    form1: JSON.parse(localStorage.getItem('form1'))  //登录信息
   }
-
-});
-export default store
+  // const vuexLocal = new VuexPersistence({
+  //   storage: window.localStorage,
+  //   reducer: state => ({
+  //     logindata: state.logindata,
+  //     form1: state.form1,
+  //   }),
+  //   filter: (mutation) => (
+  //     mutation.type === 'updatelogindata' ||
+  //     mutation.type === 'updatamessage' 
+  //   )
+  // })
+export default new Vuex.Store({
+  state,
+  actions,
+  mutations,
+  getters
+  // plugins: [vuexLocal.plugin]
+})

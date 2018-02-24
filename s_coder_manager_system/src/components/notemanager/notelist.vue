@@ -58,7 +58,10 @@ export default {
     this.getArticle();
   },
   mounted() {
-      console.log('no')
+    if (!localStorage.getItem('logindata')) {
+      this.$router.push('/');
+      location.reload();
+    }
   },
   methods: {
     // 删除选中的
@@ -149,12 +152,8 @@ export default {
           pageSize: this.pageSize
         }
       }).then(response => {
-        if(res.data.result==200){
         that.tableData3 = response.data.detail;
         console.log(this.tableData3);
-        }else{
-          alert('qin')
-        }
 
       });
     },

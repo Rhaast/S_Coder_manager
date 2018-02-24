@@ -45,7 +45,7 @@ export default {
   },
   created() {
 		this.getpictrue();
-	},
+  },
   methods: {
     handleSelectionChange(val) {
 			this.multipleSelection = val;

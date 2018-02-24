@@ -1,5 +1,4 @@
 export default{
-    // getters:{
-    //     getUserInfo:state=>state.logindata,
-    //   },
+        getUserInfo:(state)=>state.logindata==null?'':state.logindata,
+        getLoginInfo:(state)=>state.form1==null?'':state.form1
   }

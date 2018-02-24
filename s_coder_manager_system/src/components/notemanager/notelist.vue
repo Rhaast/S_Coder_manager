@@ -57,6 +57,9 @@ export default {
   created() {
     this.getArticle();
   },
+  mounted() {
+      console.log('no')
+  },
   methods: {
     // 删除选中的
     deletechoose() {
@@ -130,17 +133,29 @@ export default {
 			},
     getArticle: function() {
       let that = this;
+      let getuserinfo = JSON.parse(localStorage.getItem('logindata')); 
+      that.token = getuserinfo.token
+      console.log(this.token)
+
       axios({
         url: "http://xyiscoding.top/studyapp/note/findAll",
         dataType: "json",
         method: "post",
+        headers:{
+          token:this.token
+        },
         data: {
           pageNo: this.pageNo,
           pageSize: this.pageSize
         }
       }).then(response => {
+        if(res.data.result==200){
         that.tableData3 = response.data.detail;
         console.log(this.tableData3);
+        }else{
+          alert('qin')
+        }
+
       });
     },
     // 删除单篇文章

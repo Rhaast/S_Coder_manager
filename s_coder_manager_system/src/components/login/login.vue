@@ -30,6 +30,7 @@
 <script>
 import axios from 'axios'
 import { mapActions } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   data() {
     return {
@@ -41,6 +42,10 @@ export default {
   },
   methods: {
     ...mapActions(["login"]),
+    ...mapMutations({
+      setform: 'UPFORM_MUTATION',   // 提交登录信息常量
+      setuserinfo: 'UPLOGIN_MUTATION'
+    }),
     wuha(){
       if(!this.username||!this.password){
         this.chooese=true;
@@ -53,25 +58,22 @@ export default {
           userName:this.username,
           password:this.password            
       };
-      this.$store.commit('updatamessage',form1)
-      this.login().then(res=>{    
+      this.setform(form1);    //调用mutation方法并传递参数
+      this.login().then(res=>{    // 异步调用actions中所定义的请求
           if (res.data.result == '200') {   
-          localStorage.setItem('data', JSON.stringify(res.data)); //保存登录状态
-          let message = JSON.parse(localStorage.getItem('data')); //取得localStorage数据
-          let logindata = message.detail
-          this.$store.commit("updatelogindata", logindata)
+          let logindata = res.data.detail
+          this.setuserinfo(logindata)
+          // this.$store.commit("updatelogindata", logindata)
           this.$message({
             type: 'success',
             message: '登录成功'
           });
-          // localStorage.setItem('mystate', JSON.stringify(context.state));
            this.$router.replace('/notemanager/notelist')
       } else {
        this.$message.error("用户名或密码错误");
       }
       })
     },  
-
   }
 };
 </script>

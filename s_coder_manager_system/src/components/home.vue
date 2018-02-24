@@ -11,8 +11,8 @@
           <img src="../assets/image/icon-slidebar.png" height="25" width="21" @click="collapsed">
         </div>
         <div class="userstatus">
-          <span class="username">{{logindata.userName}}</span>
-          <span class="portrait"><img :src="'http://xyiscoding.top/img/'+logindata.portrait" height="24" width="24"></span>
+          <span class="username">{{getUserInfo.user.userName}}</span>
+          <span class="portrait"><img :src="'http://xyiscoding.top/img/'+getUserInfo.user.portrait" height="24" width="24"></span>
           <span class="verticalline">|</span>
           <span class="loginstatus" @click="logout">{{logintxt}}</span>
         </div>
@@ -38,6 +38,8 @@
 import Sidebar from "../components/slidebar/Sidebar";
 import breadcrumb from "../components/breadcrumb/breadcrumb";
 import {mapState} from 'vuex';
+import { mapGetters } from 'vuex';
+
 export default {
   name: "HelloWorld",
   data() {
@@ -48,15 +50,16 @@ export default {
     };
   },
   computed: {    //获得vuex里的状态
-    logindata(){
-      return this.$store.state.logindata;
-    }
+    ...mapGetters([
+      'getUserInfo'
+      // ...
+    ])
   },
   mounted() {
-    if (localStorage.getItem('data')) {
+    if (this.$store.getters.getUserInfo) {
       this.logintxt = "注销";
     }
-    if (!localStorage.getItem('data')) {
+    if (!this.$store.getters.getUserInfo) {
       this.logintxt = "未登录";
     }
   },
@@ -71,9 +74,9 @@ export default {
         }).then(() => {
            this.$router.push('/')
            location.reload();
-           localStorage.clear()
-           this.$store.commit("updateUserInfo","");
-           this.$store.commit("updatePortrait","");
+           this.$store.commit("updatelogindata","");
+           this.$store.commit("updatamessage","");
+           localStorage.clear();
            this.$message({
             type: 'success',
             message: '已退出'

@@ -16,7 +16,19 @@ Vue.use(ElementUI)
 Vue.use(axios)
 Vue.use(mavonEditor)
 
-/* eslint-disable no-new */
+// 路由登录权限拦截
+router.beforeEach((to, from, next) => {
+  if (to.path === '/') {
+    next()
+  } else {
+    if (!store.state.logindata && (to.path != '/')) {
+      next({ path: '/' })
+      location.reload()
+    } else {
+      next()
+    }
+  }
+})
 new Vue({
   el: '#app',
   store,

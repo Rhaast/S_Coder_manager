@@ -76,7 +76,7 @@ export default {
            location.reload();
            this.$store.commit("updatelogindata","");
            this.$store.commit("updatamessage","");
-           localStorage.clear();
+           sessionStorage.clear();
            this.$message({
             type: 'success',
             message: '已退出'

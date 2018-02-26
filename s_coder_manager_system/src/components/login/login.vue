@@ -69,6 +69,7 @@ export default {
             message: '登录成功'
           });
            this.$router.replace('/notemanager/notelist')
+          //  location.reload();
       } else {
        this.$message.error("用户名或密码错误");
       }

@@ -57,12 +57,13 @@ export default {
   created() {
     this.getArticle();
   },
-  mounted() {
-    if (!localStorage.getItem('logindata')) {
-      this.$router.push('/');
-      location.reload();
-    }
-  },
+  // mounted() {
+  //   if (!localStorage.getItem('logindata')) {
+  //     this.$router.push('/');
+  //     location.reload();
+  //     alert(11)
+  //   }
+  // },
   methods: {
     // 删除选中的
     deletechoose() {
@@ -136,7 +137,7 @@ export default {
 			},
     getArticle: function() {
       let that = this;
-      let getuserinfo = JSON.parse(localStorage.getItem('logindata')); 
+      let getuserinfo = JSON.parse(sessionStorage.getItem('logindata')); 
       that.token = getuserinfo.token
       console.log(this.token)
 

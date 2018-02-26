@@ -7,10 +7,10 @@ import getters from './getters'
 
 
 Vue.use(Vuex)
-const localLoginData = global.localStorage;
+// const localLoginData = global.localStorage;
   const state = {
-    logindata: JSON.parse(localStorage.getItem('logindata')), // 初始化vuex，刷新时获取localstorage
-    form1: JSON.parse(localStorage.getItem('form1'))  //登录信息
+    logindata: JSON.parse(sessionStorage.getItem('logindata')), // 初始化vuex，刷新时获取localstorage
+    form1: JSON.parse(sessionStorage.getItem('form1'))  //登录信息
   }
 export default new Vuex.Store({
   state,

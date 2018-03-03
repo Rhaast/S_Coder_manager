@@ -10,6 +10,10 @@ export const MENULIST = [
       {
         menuName: "新增笔记",
         menuUrl: "/notemanager/addnote"
+      },
+      {
+        menuName: "我的笔记",
+        menuUrl: "/notemanager/mynote"
       }
     ]
   },

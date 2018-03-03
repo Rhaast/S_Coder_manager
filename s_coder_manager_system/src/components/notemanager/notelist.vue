@@ -2,7 +2,7 @@
   <div>
     <div class="listheader">
       <el-button type="primary" @click="$router.push('/notemanager/addnote')"><i class="el-icon-plus"></i>新增</el-button>
-      <el-button type="danger" @click="deletechoose" :disabled="forbidden">删除选中</el-button>
+      <el-button type="danger" @click="deletechoose" :disabled="forbidden" v-if="this.roleId==1">删除选中</el-button>
       <!-- <div class="el-input" style="width: 200px; float: right;">
       <i class="el-input__icon el-icon-search"></i>
       <input type="text" placeholder="输入用户名称" v-model="searchKey" @keyup.enter="search($event)"
@@ -20,7 +20,7 @@
         </el-table-column>
         <el-table-column prop="title" label="文章标题" show-overflow-tooltip>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" v-if="this.roleId==1">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -37,6 +37,7 @@
 <script>
 import moment from "moment";
 import axios from "axios";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -47,15 +48,27 @@ export default {
           createTime: "",
           userName: "",
           title: "",
-          id: ""
+          id: "",
+          roleId:""
         }
       ],
       multipleSelection: [],
       forbidden: true
     };
   },
+  computed: {
+    //获得vuex里的状态
+    ...mapGetters([
+      "getUserInfo"
+      // ...
+    ])
+  },
   created() {
     this.getArticle();
+    let that =this;
+    let userInfo = this.getUserInfo;
+    that.roleId = userInfo.user.roleId;
+    console.log(this.roleId)
   },
   // mounted() {
   //   if (!localStorage.getItem('logindata')) {
@@ -73,7 +86,9 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(() => {
+      })
+        .then(() => {
+           if(this.roleId==1){
           this.multipleSelection.forEach(selectedItem => {
             axios({
               url:
@@ -88,6 +103,9 @@ export default {
               // });
             });
           });
+          }else{
+            alert('只有管理员才有删除权限')
+          }
         })
         .catch(() => {
           this.$message({
@@ -131,22 +149,25 @@ export default {
         this.forbidden = true;
       }
     },
-    handleEdit:function(index){
-				let id = this.tableData3[index].id;
-				this.$router.push({path:'/notemanager/edit',query:{id:id}})
-			},
+    handleEdit: function(index) {
+      if(this.roleId==1){
+      let id = this.tableData3[index].id;
+      this.$router.push({ path: "/notemanager/edit", query: { id: id } });
+      }else{
+        alert(11)
+      }
+    },
     getArticle: function() {
       let that = this;
-      let getuserinfo = JSON.parse(sessionStorage.getItem('logindata')); 
-      that.token = getuserinfo.token
-      console.log(this.token)
-
+      let getuserinfo = JSON.parse(sessionStorage.getItem("logindata"));
+      that.token = getuserinfo.token;
+      console.log(this.token);
       axios({
         url: "http://xyiscoding.top/studyapp/note/findAll",
         dataType: "json",
         method: "post",
-        headers:{
-          token:this.token
+        headers: {
+          token: this.token
         },
         data: {
           pageNo: this.pageNo,
@@ -155,13 +176,15 @@ export default {
       }).then(response => {
         that.tableData3 = response.data.detail;
         console.log(this.tableData3);
-
       });
     },
     // 删除单篇文章
     handleDelete: function(index) {
       let that = this;
       that.id = this.tableData3[index].id; //获取当前选中的文章id
+      let userInfo = this.getUserInfo;
+      that.roleId = userInfo.user.roleId;
+      console.log(this.roleId);
       console.log(this.id);
       this.$confirm("此操作将删除该文章, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -169,6 +192,7 @@ export default {
         type: "warning"
       })
         .then(() => {
+          if(this.roleId==1){
           axios({
             url: "http://xyiscoding.top/studyapp/note/delete/" + this.id,
             method: "get",
@@ -179,7 +203,10 @@ export default {
               type: "success",
               message: "删除成功!"
             });
-          });
+          });}
+          else{
+            alert('只有管理员才有删除权限')
+          }
         })
         .catch(() => {
           this.$message({

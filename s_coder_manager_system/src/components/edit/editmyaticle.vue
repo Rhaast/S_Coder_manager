@@ -126,9 +126,12 @@ export default {
         dataType: "json",
         data: {
           title: this.title,
+          type:0,
+          views:'',
+          commentNum:'',
           content: this.content,
           userId: this.userId,
-          userName: this.userName,
+          userName: this.nickName,
           id:this.id,
           createTime:this.createTime
         }

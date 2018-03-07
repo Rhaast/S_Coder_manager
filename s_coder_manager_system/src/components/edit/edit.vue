@@ -115,6 +115,9 @@ export default {
         method: "post",
         dataType: "json",
         data: {
+          type:0,
+          views:'',
+          commentNum:'',
           title: this.title,
           content: this.content,
           userId: this.userId,

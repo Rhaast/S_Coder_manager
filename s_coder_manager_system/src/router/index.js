@@ -8,6 +8,7 @@ import noteView from "@/components/notemanager/notemanager"
 const NOTELIST = resolve =>require(['@/components/notemanager/notelist'],resolve);
 const ADDNOTE = resolve =>require(['@/components/notemanager/addnote'],resolve);
 const EDITNOTE = resolve =>require(['@/components/edit/edit'],resolve);
+const EDITMYNOTE = resolve =>require(['@/components/edit/editmyaticle'],resolve);
 const MYNOTE = resolve =>require(['@/components/notemanager/mynote'],resolve);
 // banner管理
 import bannerView from "@/components/bannermanager/bannermanager"
@@ -70,6 +71,13 @@ export default new Router({
         {
           path: '/notemanager/edit',
           component: EDITNOTE,
+          meta: {
+            breadcrumbName: "编辑笔记"
+          }
+        },
+        {
+          path: '/notemanager/editmyaticle',
+          component: EDITMYNOTE,
           meta: {
             breadcrumbName: "编辑笔记"
           }

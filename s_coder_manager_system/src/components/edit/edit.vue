@@ -8,11 +8,6 @@
 	<el-dialog title="用户信息" :visible.sync="dialogFormVisible" class="handIn">
 		标题：
 		<el-input v-model="title" placeholder="请输入标题"></el-input>
-        <div style="height:30px"></div>
-        <el-input v-model="userId" placeholder="请输入需要添加的用户id"></el-input>
-        <div style="height:30px"></div>
-        <el-input v-model="nickName" placeholder="请输入用户昵称"></el-input>
-		<div style="height:30px;"></div>
 		<div slot="footer" class="dialog-footer">
 		<el-button @click="dialogFormVisible = false">取 消</el-button>
 		<el-button type="primary" @click="subArticle">确 定</el-button>
@@ -110,14 +105,6 @@ export default {
         this.$message.error("文章标题不能为空");
         return;
       }
-      if (!this.userId) {
-        this.$message.error("userId不能为空");
-        return;
-      }
-      if (!this.nickName) {
-        this.$message.error("昵称不能为空");
-        return;
-      }
       if (!this.content) {
         this.$message.error("文章内容不能为空");
         return;
@@ -131,7 +118,7 @@ export default {
           title: this.title,
           content: this.content,
           userId: this.userId,
-          userName: this.nickName,
+          userName: this.userName,
           id:this.id,
           createTime:this.createTime
         }

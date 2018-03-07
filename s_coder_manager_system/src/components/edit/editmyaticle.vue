@@ -8,7 +8,6 @@
 	<el-dialog title="用户信息" :visible.sync="dialogFormVisible" class="handIn">
 		标题：
 		<el-input v-model="title" placeholder="请输入标题"></el-input>
-        <div style="height:30px"></div>
 		<div slot="footer" class="dialog-footer">
 		<el-button @click="dialogFormVisible = false">取 消</el-button>
 		<el-button type="primary" @click="subArticle">确 定</el-button>
@@ -25,17 +24,43 @@ export default {
     return {
       dialogFormVisible: false,
       content: "",
+      userId: "",
+      nickName: "",
       title: "",
       img_file: {},
+      id:'',
+      createTime:''
     };
   },
-  computed: {    //获得vuex里的状态
+   computed: {    //获得vuex里的状态
     ...mapGetters([
       'getUserInfo'
       // ...
     ])
   },
+  created () {
+      this.getnoteid()
+  },
   methods: {
+    getnoteid() {
+     let that = this // 取得笔记id
+     that.id = this.$route.query.id;
+     that.noteid = that.id;
+     console.log(this.noteid);
+      axios({
+        url: 'http://xyiscoding.top/studyapp/note/findById/' + that.noteid,
+        dataType: 'json',
+        method: 'get',
+      }).then((response)=>{
+        that.noteLists = response.data.detail.note;
+        that.content = that.noteLists.content;
+        that.title = that.noteLists.title;
+        that.userId = that.noteLists.userId;
+        that.userName = that.noteLists.userName;
+        console.log(this.noteLists)
+      })
+
+    },
     // 绑定@imgAdd event
     $imgAdd(pos, $file) {
       // 缓存图片信息
@@ -90,33 +115,27 @@ export default {
         this.$message.error("文章标题不能为空");
         return;
       }
-      if (!this.userId) {
-        this.$message.error("userId不能为空");
-        return;
-      }
-      if (!this.nickName) {
-        this.$message.error("昵称不能为空");
-        return;
-      }
       if (!this.content) {
         this.$message.error("文章内容不能为空");
         return;
       }
-
+     that.createTime =Date.parse(new Date());
       axios({
-        url: "http://xyiscoding.top/studyapp/note/add",
+        url: "http://xyiscoding.top/studyapp/note/update",
         method: "post",
         dataType: "json",
         data: {
           title: this.title,
           content: this.content,
           userId: this.userId,
-          userName: this.nickName
+          userName: this.userName,
+          id:this.id,
+          createTime:this.createTime
         }
       }).then(res => {
         if (res.data.result == "200") {
           this.$message({
-            message: "提交成功",
+            message: "更改成功",
             type: "success"
           });
           this.cce = setTimeout(() => {

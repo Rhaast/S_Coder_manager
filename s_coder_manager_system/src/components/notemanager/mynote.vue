@@ -64,13 +64,6 @@ export default {
   created() {
     this.getArticle();
   },
-  // mounted() {
-  //   if (!localStorage.getItem('logindata')) {
-  //     this.$router.push('/');
-  //     location.reload();
-  //     alert(11)
-  //   }
-  // },
   methods: {
     // 删除选中的
     deletechoose() {
@@ -140,7 +133,7 @@ export default {
     },
     handleEdit:function(index){
 		let id = this.tableData3[index].id;
-		this.$router.push({path:'/notemanager/edit',query:{id:id}})
+		this.$router.push({path:'/notemanager/editmyaticle',query:{id:id}})
 			},
     getArticle: function() {
         let that = this;
